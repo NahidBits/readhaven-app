@@ -1,42 +1,88 @@
-<div>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" routerLink="/home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+<!-- HEADER -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" routerLink="/books">
+        <img src="assets/uploads/logo/logo.png" alt="ReadHaven" class="rounded-circle" style="width: 55px; height: 55px;" />
+        ReadHaven
+      </a>
+
+      <div class="navbar-collapse collapse d-sm-inline-flex">
+        <ul class="navbar-nav d-flex align-items-center ms-auto">
+          <li class="nav-item position-relative">
+            <a class="nav-link text-dark" routerLink="/cart">
+              <i class="bi bi-cart fs-5"></i>
+              <span class="position-absolute top-0 start-100 rounded-pill" id="cart-count-badge"></span>
+            </a>
+          </li>
+
+          <ng-container *ngIf="isAuthenticated; else loginLink">
+            <li class="nav-item">
+              <a class="nav-link text-dark" routerLink="/profile">
+                <i class="bi bi-person fs-5"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-link text-dark p-0" (click)="logout()" style="text-decoration: none;">
+                <i class="bi bi-box-arrow-right fs-5"></i>
+              </button>
+            </li>
+          </ng-container>
+
+          <ng-template #loginLink>
+            <li class="nav-item">
+              <a class="nav-link text-dark" routerLink="/login">
+                <i class="bi bi-box-arrow-in-right fs-5"></i> Login
+              </a>
+            </li>
+          </ng-template>
+        </ul>
+      </div>
     </div>
   </nav>
-  <div class="container mt-4">
-  
-  <router-outlet></router-outlet>
-</div>
-</div>
+</header>
 
+<!-- MAIN BODY -->
+<main class="flex-grow-1">
+  <div class="container pb-3">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="readhaven-footer text-white mt-auto">
+  <div class="container">
+    <div class="logo-text">
+      <a routerLink="/books" class="text-white text-decoration-none d-flex align-items-center">
+        <img src="assets/uploads/logo/logo.png" class="rounded-circle me-2" style="width: 30px; height: 30px;" />
+        <strong class="fs-6 mb-0">ReadHaven</strong>
+      </a>
+      <div class="motto">
+        <small>Your book companion, always here for you.</small>
+      </div>
+    </div>
+    <div class="contact-info">
+      <div class="contact-info-left">
+        <small><i class="bi bi-envelope me-1"></i> support"&#64;"readhaven.com</small>
+        <small><i class="bi bi-phone me-1"></i> +880-1234-567890</small>
+        <small><i class="bi bi-geo-alt me-1"></i> Dhaka, Bangladesh</small>
+      </div>
+      <div class="social-links">
+        <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Global Toast -->
+<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+  <div class="toast align-items-center text-white bg-success border-0" role="alert" id="globalToast">
+    <div class="d-flex">
+      <div class="toast-body" id="globalToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>

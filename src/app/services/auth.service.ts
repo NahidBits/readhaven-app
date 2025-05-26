@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
@@ -10,28 +11,37 @@ interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7212/Auth/authenticate'; // <-- Replace with your .NET API login URL
+  private apiUrl = 'https://localhost:7212/Auth/authenticate';
+  private isBrowser: boolean;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(this.apiUrl, { email, password }).pipe(
       tap(response => {
-        // Save JWT token to localStorage
-        localStorage.setItem('jwtToken', response.token);
+        if (this.isBrowser) {
+          localStorage.setItem('jwtToken', response.token);
+        }
       })
     );
   }
 
-  logout() {
-    localStorage.removeItem('jwtToken');
+  logout(): void {
+    if (this.isBrowser) {
+      localStorage.removeItem('jwtToken');
+    }
   }
 
   getToken(): string | null {
-    return localStorage.getItem('jwtToken');
+    return this.isBrowser ? localStorage.getItem('jwtToken') : null;
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return this.isBrowser && !!localStorage.getItem('jwtToken');
   }
 }
